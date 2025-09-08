@@ -10,6 +10,7 @@ interface AppState {
   currentUser: User | null;
   isAuthenticated: boolean;
   authError: string | null;
+  userPasswords: { [key: string]: string };
   goals: Goal[];
   weeklyPlans: WeeklyPlan[];
   tasks: Task[];
@@ -21,6 +22,7 @@ interface AppState {
   login: (email: string, password: string) => boolean;
   logout: () => void;
   clearAuthError: () => void;
+  updatePassword: (currentPassword: string, newPassword: string) => boolean;
   
   // Goal actions
   addGoal: (goal: Goal) => void;
@@ -51,10 +53,11 @@ interface AppState {
 
 const useStore = create<AppState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       currentUser: null,
       isAuthenticated: false,
       authError: null,
+      userPasswords: {}, // Will store custom passwords if changed
       goals: sampleGoals,
       weeklyPlans: initialWeeklyPlans,
       tasks: sampleTasks,
@@ -64,6 +67,32 @@ const useStore = create<AppState>()(
       
       // Auth
       login: (email: string, password: string) => {
+        const state = get();
+        // First check if user has a custom password stored
+        const customPasswords = state.userPasswords;
+        
+        // Try custom password first if it exists
+        if (email.toLowerCase().includes('daniel') && customPasswords['Daniel']) {
+          if (password === customPasswords['Daniel']) {
+            set({ 
+              currentUser: 'Daniel', 
+              isAuthenticated: true, 
+              authError: null 
+            });
+            return true;
+          }
+        } else if (email.toLowerCase().includes('yvonne') && customPasswords['Yvonne']) {
+          if (password === customPasswords['Yvonne']) {
+            set({ 
+              currentUser: 'Yvonne', 
+              isAuthenticated: true, 
+              authError: null 
+            });
+            return true;
+          }
+        }
+        
+        // Fall back to default authentication
         const user = validateLogin(email, password);
         if (user) {
           set({ 
@@ -87,6 +116,31 @@ const useStore = create<AppState>()(
         authError: null 
       }),
       clearAuthError: () => set({ authError: null }),
+      updatePassword: (currentPassword: string, newPassword: string) => {
+        const state = get();
+        const currentUser = state.currentUser;
+        
+        if (!currentUser) return false;
+        
+        // Check if current password is correct
+        const customPassword = state.userPasswords[currentUser];
+        const defaultPassword = currentUser === 'Daniel' ? 'ChangeMe2025!D' : 'ChangeMe2025!Y';
+        const actualCurrentPassword = customPassword || defaultPassword;
+        
+        if (currentPassword !== actualCurrentPassword) {
+          return false;
+        }
+        
+        // Update password
+        set({
+          userPasswords: {
+            ...state.userPasswords,
+            [currentUser]: newPassword
+          }
+        });
+        
+        return true;
+      },
       
       // Goals
       addGoal: (goal) => set((state) => ({ goals: [...state.goals, goal] })),

@@ -6,9 +6,10 @@ import DailyRhythm from './DailyRhythm';
 import VisionBoard from './VisionBoard';
 import YearReview from './YearReview';
 import ReminderWidget from './ReminderWidget';
+import PasswordSetup from './PasswordSetup';
 
 const Dashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'weekly' | 'goals' | 'daily' | 'vision' | 'review'>('weekly');
+  const [activeTab, setActiveTab] = useState<'weekly' | 'goals' | 'daily' | 'vision' | 'review' | 'settings'>('weekly');
   const currentUser = useStore((state) => state.currentUser);
   const logout = useStore((state) => state.logout);
 
@@ -18,6 +19,7 @@ const Dashboard: React.FC = () => {
     { id: 'daily', label: 'Daily Rhythm', icon: '☀️' },
     { id: 'vision', label: 'Vision Board', icon: '🌟' },
     { id: 'review', label: 'Year Review', icon: '📊' },
+    { id: 'settings', label: 'Settings', icon: '⚙️' },
   ];
 
   return (
@@ -78,6 +80,7 @@ const Dashboard: React.FC = () => {
         {activeTab === 'daily' && <DailyRhythm />}
         {activeTab === 'vision' && <VisionBoard />}
         {activeTab === 'review' && <YearReview />}
+        {activeTab === 'settings' && <PasswordSetup />}
       </main>
 
       {/* Reminder Widget */}
