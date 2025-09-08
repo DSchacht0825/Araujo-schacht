@@ -1,5 +1,5 @@
 // Simple authentication config for Daniel and Yvonne
-// In production, you'd want to hash these passwords and store them securely
+// Passwords can be set via environment variables or changed here directly
 
 export interface UserAccount {
   email: string;
@@ -8,17 +8,26 @@ export interface UserAccount {
   id: string;
 }
 
+// Get passwords from environment variables or use defaults
+// To change passwords:
+// 1. Create a .env.local file (copy from .env.example)
+// 2. Set your passwords there
+// OR just change them directly below
+
+const danielPassword = process.env.REACT_APP_DANIEL_PASSWORD || 'ChangeMe2025!D';
+const yvonnePassword = process.env.REACT_APP_YVONNE_PASSWORD || 'ChangeMe2025!Y';
+
 // For simplicity and security, these are the only two accounts allowed
 export const authorizedAccounts: UserAccount[] = [
   {
-    email: 'daniel@araujo-schacht.com',
-    password: 'BelongingBecoming2025!', // You can change this
+    email: process.env.REACT_APP_DANIEL_EMAIL || 'daniel@araujo-schacht.com',
+    password: danielPassword,
     name: 'Daniel',
     id: 'daniel-user'
   },
   {
-    email: 'yvonne@araujo-schacht.com',
-    password: 'BelongingBecoming2025!', // You can change this
+    email: process.env.REACT_APP_YVONNE_EMAIL || 'yvonne@araujo-schacht.com',
+    password: yvonnePassword,
     name: 'Yvonne', 
     id: 'yvonne-user'
   }

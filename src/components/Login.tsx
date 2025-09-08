@@ -106,13 +106,15 @@ const Login: React.FC = () => {
             </button>
           </form>
 
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-            <h4 className="text-sm font-medium text-blue-800 mb-2">Demo Accounts:</h4>
-            <div className="text-xs text-blue-600 space-y-1">
-              <div><strong>Daniel:</strong> daniel@araujo-schacht.com</div>
-              <div><strong>Yvonne:</strong> yvonne@araujo-schacht.com</div>
-              <div><strong>Password:</strong> BelongingBecoming2025!</div>
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+            <h4 className="text-sm font-medium text-gray-700 mb-2">Authorized Users:</h4>
+            <div className="text-xs text-gray-600 space-y-1">
+              <div>• Daniel Schacht</div>
+              <div>• Yvonne Araujo</div>
             </div>
+            <p className="text-xs text-gray-500 mt-2">
+              Use your personal email and password to sign in.
+            </p>
           </div>
 
           <div className="mt-8 text-center">

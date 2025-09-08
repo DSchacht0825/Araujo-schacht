@@ -7,32 +7,40 @@ Your app now has secure email/password authentication with only two authorized a
 ### Default Accounts
 - **Daniel:** daniel@araujo-schacht.com
 - **Yvonne:** yvonne@araujo-schacht.com  
-- **Default Password:** `BelongingBecoming2025!`
+- **Default Passwords:** 
+  - Daniel: `ChangeMe2025!D`
+  - Yvonne: `ChangeMe2025!Y`
 
-## Changing Passwords (Recommended)
+## Changing Passwords (IMPORTANT - Do This First!)
 
-To change your passwords for better security:
+You have two options to set your own passwords:
+
+### Option 1: Environment Variables (Recommended for Vercel)
+
+1. **For Local Development:**
+   - Copy `.env.example` to `.env.local`
+   - Update with your passwords:
+   ```
+   REACT_APP_DANIEL_PASSWORD=YourSecurePassword123!
+   REACT_APP_YVONNE_PASSWORD=YourSecurePassword456!
+   ```
+
+2. **For Vercel Deployment:**
+   - Go to your Vercel project settings
+   - Navigate to Settings → Environment Variables
+   - Add these variables:
+     - `REACT_APP_DANIEL_PASSWORD` = Your password for Daniel
+     - `REACT_APP_YVONNE_PASSWORD` = Your password for Yvonne
+   - Redeploy to apply changes
+
+### Option 2: Direct Code Change
 
 1. Open `src/auth/authConfig.ts`
-2. Update the password fields:
-
-```typescript
-export const authorizedAccounts: UserAccount[] = [
-  {
-    email: 'daniel@araujo-schacht.com',
-    password: 'YOUR_NEW_STRONG_PASSWORD', // Change this
-    name: 'Daniel',
-    id: 'daniel-user'
-  },
-  {
-    email: 'yvonne@araujo-schacht.com',
-    password: 'YOUR_NEW_STRONG_PASSWORD', // Change this
-    name: 'Yvonne', 
-    id: 'yvonne-user'
-  }
-];
-```
-
+2. Change the default passwords in lines 17-18:
+   ```typescript
+   const danielPassword = process.env.REACT_APP_DANIEL_PASSWORD || 'YourNewPassword!';
+   const yvonnePassword = process.env.REACT_APP_YVONNE_PASSWORD || 'YourNewPassword!';
+   ```
 3. Commit and push to trigger Vercel redeployment
 
 ## Password Requirements
