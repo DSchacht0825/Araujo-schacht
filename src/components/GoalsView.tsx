@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useStore from '../store/useStore';
-import { Goal, Milestone } from '../types';
+import { Goal } from '../types';
 import { format } from 'date-fns';
 
 const GoalsView: React.FC = () => {

@@ -81,7 +81,6 @@ const YearReview: React.FC = () => {
   const completedGoals = goals.filter(g => g.completed).length;
   const totalGoals = goals.length;
   const completedTasks = tasks.filter(t => t.completed).length;
-  const totalTasks = tasks.length;
 
   return (
     <div className="space-y-6">
