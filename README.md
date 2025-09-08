@@ -1,5 +1,7 @@
 # Araujo-Schacht Belonging & Becoming App
 
+*Last updated: September 8, 2025*
+
 A beautiful 12-week planner application built with React, TypeScript, and Tailwind CSS, designed specifically for Yvonne and Daniel to track personal and family goals.
 
 ## Features
