@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { Goal, WeeklyPlan, Task, DailyRhythm, VisionBoard } from '../types';
 
 // Goals Service

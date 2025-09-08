@@ -2,10 +2,16 @@ import { createClient } from '@supabase/supabase-js'
 
 // You'll need to replace these with your actual Supabase project credentials
 // Get them from: https://supabase.com/dashboard/project/YOUR_PROJECT/settings/api
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || 'https://your-project-ref.supabase.co'
-const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY || 'your-anon-key-here'
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL
+const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Only create Supabase client if environment variables are provided
+export const supabase = supabaseUrl && supabaseAnonKey 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null
+
+// Helper to check if Supabase is configured
+export const isSupabaseConfigured = () => Boolean(supabaseUrl && supabaseAnonKey)
 
 // Database type definitions for TypeScript
 export interface Database {

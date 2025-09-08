@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import useSupabaseStore from '../store/supabaseStore';
+import useStore from '../store/useStore';
 import { DailyRhythm as DailyRhythmType, Habit } from '../types';
 
 const DailyRhythm: React.FC = () => {
-  const currentUser = useSupabaseStore((state) => state.currentUser);
-  const dailyRhythms = useSupabaseStore((state) => state.dailyRhythms);
-  const addDailyRhythm = useSupabaseStore((state) => state.addDailyRhythm);
-  const updateDailyRhythm = useSupabaseStore((state) => state.updateDailyRhythm);
+  const currentUser = useStore((state) => state.currentUser);
+  const dailyRhythms = useStore((state) => state.dailyRhythms);
+  const addDailyRhythm = useStore((state) => state.addDailyRhythm);
+  const updateDailyRhythm = useStore((state) => state.updateDailyRhythm);
 
   const today = format(new Date(), 'yyyy-MM-dd');
   

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import useSupabaseStore from '../store/supabaseStore';
+import useStore from '../store/useStore';
 import WeeklyView from './WeeklyView';
 import GoalsView from './GoalsView';
 import DailyRhythm from './DailyRhythm';
@@ -7,12 +7,11 @@ import VisionBoard from './VisionBoard';
 import YearReview from './YearReview';
 import ReminderWidget from './ReminderWidget';
 import PasswordSetup from './PasswordSetup';
-import SyncStatus from './SyncStatus';
 
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'weekly' | 'goals' | 'daily' | 'vision' | 'review' | 'settings'>('weekly');
-  const currentUser = useSupabaseStore((state) => state.currentUser);
-  const logout = useSupabaseStore((state) => state.logout);
+  const currentUser = useStore((state) => state.currentUser);
+  const logout = useStore((state) => state.logout);
 
   const tabs = [
     { id: 'weekly', label: 'Weekly Plan', icon: '📅' },
@@ -36,7 +35,6 @@ const Dashboard: React.FC = () => {
               <p className="text-sm text-gray-600 mt-1">12-Week Achievement System</p>
             </div>
             <div className="flex items-center space-x-6">
-              <SyncStatus />
               <div className="flex items-center space-x-4">
                 <span className="text-sm font-medium text-gray-700">
                   Welcome, {currentUser}!

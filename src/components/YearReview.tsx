@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import useSupabaseStore from '../store/supabaseStore';
+import useStore from '../store/useStore';
 import { YearReview as YearReviewType } from '../types';
 
 const YearReview: React.FC = () => {
-  const yearReview = useSupabaseStore((state) => state.yearReview);
-  const setYearReview = useSupabaseStore((state) => state.setYearReview);
-  const goals = useSupabaseStore((state) => state.goals);
-  const tasks = useSupabaseStore((state) => state.tasks);
+  const yearReview = useStore((state) => state.yearReview);
+  const setYearReview = useStore((state) => state.setYearReview);
+  const goals = useStore((state) => state.goals);
+  const tasks = useStore((state) => state.tasks);
 
   const currentYear = new Date().getFullYear();
   

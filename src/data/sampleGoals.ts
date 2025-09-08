@@ -1,6 +1,19 @@
 import { Goal } from '../types';
+import { format, addWeeks, startOfWeek } from 'date-fns';
 
-export const sampleGoals: Goal[] = [
+// Generate sample goals with dynamic dates
+const generateSampleGoals = (): Goal[] => {
+  const today = new Date();
+  const mondayThisWeek = startOfWeek(today, { weekStartsOn: 1 });
+  const week12End = addWeeks(mondayThisWeek, 11);
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  
+  const targetDate = format(week12End, 'yyyy-MM-dd');
+  const createdAt = yesterday.toISOString();
+  const updatedAt = yesterday.toISOString();
+
+  return [
   // Daniel's Goals
   {
     id: 'daniel-1',
@@ -8,7 +21,7 @@ export const sampleGoals: Goal[] = [
     description: 'Build consistent exercise habits and improve overall health and strength',
     category: 'health',
     owner: 'Daniel',
-    targetDate: '2025-11-30',
+    targetDate,
     completed: false,
     progress: 0,
     milestones: [
@@ -17,8 +30,8 @@ export const sampleGoals: Goal[] = [
       { id: 'm3', title: 'Week 8: Mid-program evaluation', completed: false, dueDate: '2025-11-02' },
       { id: 'm4', title: 'Week 12: Final assessment & celebration', completed: false, dueDate: '2025-11-30' },
     ],
-    createdAt: '2025-09-07T00:00:00Z',
-    updatedAt: '2025-09-07T00:00:00Z',
+    createdAt,
+    updatedAt,
   },
   {
     id: 'daniel-2',
@@ -26,7 +39,7 @@ export const sampleGoals: Goal[] = [
     description: 'Create and launch a professional photography website showcasing latest work',
     category: 'career',
     owner: 'Daniel',
-    targetDate: '2025-11-15',
+    targetDate: format(addWeeks(mondayThisWeek, 10), 'yyyy-MM-dd'),
     completed: false,
     progress: 10,
     milestones: [
@@ -35,8 +48,8 @@ export const sampleGoals: Goal[] = [
       { id: 'm7', title: 'Write portfolio descriptions', completed: false, dueDate: '2025-11-01' },
       { id: 'm8', title: 'Launch and share portfolio', completed: false, dueDate: '2025-11-15' },
     ],
-    createdAt: '2025-09-07T00:00:00Z',
-    updatedAt: '2025-09-07T00:00:00Z',
+    createdAt,
+    updatedAt,
   },
 
   // Yvonne's Goals
@@ -46,7 +59,7 @@ export const sampleGoals: Goal[] = [
     description: 'Build a consistent 20-minute daily meditation practice for inner peace and clarity',
     category: 'spiritual',
     owner: 'Yvonne',
-    targetDate: '2025-11-30',
+    targetDate,
     completed: false,
     progress: 5,
     milestones: [
@@ -55,8 +68,8 @@ export const sampleGoals: Goal[] = [
       { id: 'm11', title: 'Week 8: Reach 20 minutes daily', completed: false, dueDate: '2025-11-02' },
       { id: 'm12', title: 'Week 12: Complete 84-day streak', completed: false, dueDate: '2025-11-30' },
     ],
-    createdAt: '2025-09-07T00:00:00Z',
-    updatedAt: '2025-09-07T00:00:00Z',
+    createdAt,
+    updatedAt,
   },
   {
     id: 'yvonne-2',
@@ -64,7 +77,7 @@ export const sampleGoals: Goal[] = [
     description: 'Finish the advanced certification program and apply new skills at work',
     category: 'career',
     owner: 'Yvonne',
-    targetDate: '2025-11-20',
+    targetDate: format(addWeeks(mondayThisWeek, 11), 'yyyy-MM-dd'),
     completed: false,
     progress: 15,
     milestones: [
@@ -73,8 +86,8 @@ export const sampleGoals: Goal[] = [
       { id: 'm15', title: 'Complete final modules', completed: false, dueDate: '2025-11-10' },
       { id: 'm16', title: 'Pass certification exam', completed: false, dueDate: '2025-11-20' },
     ],
-    createdAt: '2025-09-07T00:00:00Z',
-    updatedAt: '2025-09-07T00:00:00Z',
+    createdAt,
+    updatedAt,
   },
 
   // Family Goals
@@ -84,7 +97,7 @@ export const sampleGoals: Goal[] = [
     description: 'Research, plan, and book our dream vacation for early 2026',
     category: 'family',
     owner: 'both',
-    targetDate: '2025-11-30',
+    targetDate,
     completed: false,
     progress: 0,
     milestones: [
@@ -93,8 +106,8 @@ export const sampleGoals: Goal[] = [
       { id: 'm19', title: 'Book flights and accommodations', completed: false, dueDate: '2025-11-01' },
       { id: 'm20', title: 'Plan activities and create itinerary', completed: false, dueDate: '2025-11-30' },
     ],
-    createdAt: '2025-09-07T00:00:00Z',
-    updatedAt: '2025-09-07T00:00:00Z',
+    createdAt,
+    updatedAt,
   },
   {
     id: 'family-2',
@@ -102,7 +115,7 @@ export const sampleGoals: Goal[] = [
     description: 'Build a 6-month emergency fund for financial security and peace of mind',
     category: 'financial',
     owner: 'both',
-    targetDate: '2025-11-30',
+    targetDate,
     completed: false,
     progress: 20,
     milestones: [
@@ -112,8 +125,8 @@ export const sampleGoals: Goal[] = [
       { id: 'm24', title: 'Reach 50% of target', completed: false, dueDate: '2025-11-01' },
       { id: 'm25', title: 'Complete full emergency fund', completed: false, dueDate: '2025-11-30' },
     ],
-    createdAt: '2025-09-07T00:00:00Z',
-    updatedAt: '2025-09-07T00:00:00Z',
+    createdAt,
+    updatedAt,
   },
   {
     id: 'family-3',
@@ -121,7 +134,7 @@ export const sampleGoals: Goal[] = [
     description: 'Dedicate quality time each week to deepen our relationship and communication',
     category: 'relationship',
     owner: 'both',
-    targetDate: '2025-11-30',
+    targetDate,
     completed: false,
     progress: 10,
     milestones: [
@@ -130,7 +143,10 @@ export const sampleGoals: Goal[] = [
       { id: 'm28', title: 'Plan monthly relationship check-ins', completed: false, dueDate: '2025-10-30' },
       { id: 'm29', title: 'Create shared vision for 2026', completed: false, dueDate: '2025-11-30' },
     ],
-    createdAt: '2025-09-07T00:00:00Z',
-    updatedAt: '2025-09-07T00:00:00Z',
+    createdAt,
+    updatedAt,
   },
 ];
+};
+
+export const sampleGoals: Goal[] = generateSampleGoals();

@@ -150,25 +150,42 @@ const useSupabaseStore = create<AppState>()(
         const state = get();
         const currentUser = state.currentUser;
         
-        if (!currentUser) return false;
+        console.log('updatePassword called for user:', currentUser);
+        console.log('current userPasswords state:', state.userPasswords);
+        
+        if (!currentUser) {
+          console.log('No current user, failing');
+          return false;
+        }
         
         // Check if current password is correct
         const customPassword = state.userPasswords[currentUser];
         const defaultPassword = currentUser === 'Daniel' ? 'ChangeMe2025!D' : 'ChangeMe2025!Y';
         const actualCurrentPassword = customPassword || defaultPassword;
         
+        console.log('customPassword:', customPassword);
+        console.log('defaultPassword:', defaultPassword);
+        console.log('actualCurrentPassword:', actualCurrentPassword);
+        console.log('provided currentPassword:', currentPassword);
+        
         if (currentPassword !== actualCurrentPassword) {
+          console.log('Password mismatch, failing');
           return false;
         }
         
         // Update password
+        const newUserPasswords = {
+          ...state.userPasswords,
+          [currentUser]: newPassword
+        };
+        
+        console.log('Setting new userPasswords:', newUserPasswords);
+        
         set({
-          userPasswords: {
-            ...state.userPasswords,
-            [currentUser]: newPassword
-          }
+          userPasswords: newUserPasswords
         });
         
+        console.log('Password updated successfully');
         return true;
       },
       
