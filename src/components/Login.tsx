@@ -107,13 +107,16 @@ const Login: React.FC = () => {
           </form>
 
           <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <h4 className="text-sm font-medium text-gray-700 mb-2">Authorized Users:</h4>
+            <h4 className="text-sm font-medium text-gray-700 mb-2">Login Credentials:</h4>
             <div className="text-xs text-gray-600 space-y-1">
-              <div>• Daniel Schacht</div>
-              <div>• Yvonne Araujo</div>
+              <div><strong>Daniel:</strong> schacht.dan@gmail.com</div>
+              <div><strong>Yvonne:</strong> yviea2013@gmail.com</div>
             </div>
             <p className="text-xs text-gray-500 mt-2">
-              Use your personal email and password to sign in.
+              Use password: <strong>ChangeMe2025!D</strong> (Daniel) or <strong>ChangeMe2025!Y</strong> (Yvonne)
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              Change your password in Settings after login
             </p>
           </div>
 

@@ -20,13 +20,13 @@ const yvonnePassword = process.env.REACT_APP_YVONNE_PASSWORD || 'ChangeMe2025!Y'
 // For simplicity and security, these are the only two accounts allowed
 export const authorizedAccounts: UserAccount[] = [
   {
-    email: process.env.REACT_APP_DANIEL_EMAIL || 'daniel@araujo-schacht.com',
+    email: process.env.REACT_APP_DANIEL_EMAIL || 'schacht.dan@gmail.com',
     password: danielPassword,
     name: 'Daniel',
     id: 'daniel-user'
   },
   {
-    email: process.env.REACT_APP_YVONNE_EMAIL || 'yvonne@araujo-schacht.com',
+    email: process.env.REACT_APP_YVONNE_EMAIL || 'yviea2013@gmail.com',
     password: yvonnePassword,
     name: 'Yvonne', 
     id: 'yvonne-user'
