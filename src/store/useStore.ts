@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Goal, WeeklyPlan, Task, DailyRhythm, VisionBoard, User, YearReview } from '../types';
+import { initialWeeklyPlans } from '../data/weeklyPlans';
+import { sampleGoals } from '../data/sampleGoals';
+import { sampleTasks } from '../data/sampleTasks';
 
 interface AppState {
   currentUser: User | null;
@@ -46,9 +49,9 @@ const useStore = create<AppState>()(
   persist(
     (set) => ({
       currentUser: null,
-      goals: [],
-      weeklyPlans: [],
-      tasks: [],
+      goals: sampleGoals,
+      weeklyPlans: initialWeeklyPlans,
+      tasks: sampleTasks,
       dailyRhythms: [],
       visionBoards: [],
       yearReview: null,
