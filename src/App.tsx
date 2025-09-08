@@ -1,10 +1,10 @@
 import React from 'react';
-import useStore from './store/useStore';
+import useSupabaseStore from './store/supabaseStore';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 
 function App() {
-  const isAuthenticated = useStore((state) => state.isAuthenticated);
+  const isAuthenticated = useSupabaseStore((state) => state.isAuthenticated);
 
   return (
     <>

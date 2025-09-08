@@ -1,0 +1,324 @@
+import { supabase } from '../lib/supabase';
+import { Goal, WeeklyPlan, Task, DailyRhythm, VisionBoard } from '../types';
+
+// Goals Service
+export const goalsService = {
+  // Get all goals
+  async getAll(): Promise<Goal[]> {
+    const { data, error } = await supabase
+      .from('goals')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    
+    return data.map(goal => ({
+      id: goal.id,
+      title: goal.title,
+      description: goal.description,
+      category: goal.category as Goal['category'],
+      owner: goal.owner as Goal['owner'],
+      targetDate: goal.target_date,
+      completed: goal.completed,
+      progress: goal.progress,
+      milestones: goal.milestones || [],
+      createdAt: goal.created_at,
+      updatedAt: goal.updated_at,
+    }));
+  },
+
+  // Create new goal
+  async create(goal: Omit<Goal, 'id' | 'createdAt' | 'updatedAt'>): Promise<Goal> {
+    const { data, error } = await supabase
+      .from('goals')
+      .insert({
+        title: goal.title,
+        description: goal.description,
+        category: goal.category,
+        owner: goal.owner,
+        target_date: goal.targetDate,
+        completed: goal.completed,
+        progress: goal.progress,
+        milestones: goal.milestones,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return {
+      id: data.id,
+      title: data.title,
+      description: data.description,
+      category: data.category,
+      owner: data.owner,
+      targetDate: data.target_date,
+      completed: data.completed,
+      progress: data.progress,
+      milestones: data.milestones || [],
+      createdAt: data.created_at,
+      updatedAt: data.updated_at,
+    };
+  },
+
+  // Update goal
+  async update(id: string, updates: Partial<Goal>): Promise<void> {
+    const updateData: any = {};
+    
+    if (updates.title !== undefined) updateData.title = updates.title;
+    if (updates.description !== undefined) updateData.description = updates.description;
+    if (updates.category !== undefined) updateData.category = updates.category;
+    if (updates.owner !== undefined) updateData.owner = updates.owner;
+    if (updates.targetDate !== undefined) updateData.target_date = updates.targetDate;
+    if (updates.completed !== undefined) updateData.completed = updates.completed;
+    if (updates.progress !== undefined) updateData.progress = updates.progress;
+    if (updates.milestones !== undefined) updateData.milestones = updates.milestones;
+
+    const { error } = await supabase
+      .from('goals')
+      .update(updateData)
+      .eq('id', id);
+
+    if (error) throw error;
+  },
+
+  // Delete goal
+  async delete(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('goals')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+  }
+};
+
+// Tasks Service
+export const tasksService = {
+  // Get all tasks
+  async getAll(): Promise<Task[]> {
+    const { data, error } = await supabase
+      .from('tasks')
+      .select('*')
+      .order('due_date', { ascending: true });
+    
+    if (error) throw error;
+    
+    return data.map(task => ({
+      id: task.id,
+      title: task.title,
+      completed: task.completed,
+      owner: task.owner as Task['owner'],
+      dueDate: task.due_date,
+      priority: task.priority as Task['priority'],
+      goalId: task.goal_id,
+      reminder: task.reminder,
+    }));
+  },
+
+  // Create new task
+  async create(task: Omit<Task, 'id'>): Promise<Task> {
+    const { data, error } = await supabase
+      .from('tasks')
+      .insert({
+        title: task.title,
+        completed: task.completed,
+        owner: task.owner,
+        due_date: task.dueDate,
+        priority: task.priority,
+        goal_id: task.goalId,
+        reminder: task.reminder,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return {
+      id: data.id,
+      title: data.title,
+      completed: data.completed,
+      owner: data.owner,
+      dueDate: data.due_date,
+      priority: data.priority,
+      goalId: data.goal_id,
+      reminder: data.reminder,
+    };
+  },
+
+  // Update task
+  async update(id: string, updates: Partial<Task>): Promise<void> {
+    const updateData: any = {};
+    
+    if (updates.title !== undefined) updateData.title = updates.title;
+    if (updates.completed !== undefined) updateData.completed = updates.completed;
+    if (updates.owner !== undefined) updateData.owner = updates.owner;
+    if (updates.dueDate !== undefined) updateData.due_date = updates.dueDate;
+    if (updates.priority !== undefined) updateData.priority = updates.priority;
+    if (updates.goalId !== undefined) updateData.goal_id = updates.goalId;
+    if (updates.reminder !== undefined) updateData.reminder = updates.reminder;
+
+    const { error } = await supabase
+      .from('tasks')
+      .update(updateData)
+      .eq('id', id);
+
+    if (error) throw error;
+  },
+
+  // Delete task
+  async delete(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('tasks')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+  }
+};
+
+// Weekly Plans Service
+export const weeklyPlansService = {
+  // Get all weekly plans
+  async getAll(): Promise<WeeklyPlan[]> {
+    const { data, error } = await supabase
+      .from('weekly_plans')
+      .select('*')
+      .order('week_number', { ascending: true });
+    
+    if (error) throw error;
+    
+    return data.map(plan => ({
+      id: plan.id,
+      weekNumber: plan.week_number,
+      startDate: plan.start_date,
+      endDate: plan.end_date,
+      focus: plan.focus,
+      wins: plan.wins || [],
+      lessons: plan.lessons || [],
+      tasks: [], // Tasks are separate table now
+      owner: plan.owner as WeeklyPlan['owner'],
+    }));
+  },
+
+  // Update weekly plan
+  async update(id: string, updates: Partial<WeeklyPlan>): Promise<void> {
+    const updateData: any = {};
+    
+    if (updates.focus !== undefined) updateData.focus = updates.focus;
+    if (updates.wins !== undefined) updateData.wins = updates.wins;
+    if (updates.lessons !== undefined) updateData.lessons = updates.lessons;
+
+    const { error } = await supabase
+      .from('weekly_plans')
+      .update(updateData)
+      .eq('id', id);
+
+    if (error) throw error;
+  }
+};
+
+// Daily Rhythms Service
+export const dailyRhythmsService = {
+  // Get all daily rhythms
+  async getAll(): Promise<DailyRhythm[]> {
+    const { data, error } = await supabase
+      .from('daily_rhythms')
+      .select('*')
+      .order('date', { ascending: false });
+    
+    if (error) throw error;
+    
+    return data.map(rhythm => ({
+      id: rhythm.id,
+      date: rhythm.date,
+      owner: rhythm.owner as DailyRhythm['owner'],
+      habits: rhythm.habits || [],
+      gratitude: rhythm.gratitude || [],
+      topPriorities: rhythm.top_priorities || [],
+      notes: rhythm.notes || '',
+    }));
+  },
+
+  // Create or update daily rhythm
+  async upsert(rhythm: DailyRhythm): Promise<void> {
+    const { error } = await supabase
+      .from('daily_rhythms')
+      .upsert({
+        id: rhythm.id,
+        date: rhythm.date,
+        owner: rhythm.owner,
+        habits: rhythm.habits,
+        gratitude: rhythm.gratitude,
+        top_priorities: rhythm.topPriorities,
+        notes: rhythm.notes,
+      }, {
+        onConflict: 'date,owner'
+      });
+
+    if (error) throw error;
+  }
+};
+
+// Vision Boards Service
+export const visionBoardsService = {
+  // Get all vision boards
+  async getAll(): Promise<VisionBoard[]> {
+    const { data, error } = await supabase
+      .from('vision_boards')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    
+    return data.map(board => ({
+      id: board.id,
+      owner: board.owner as VisionBoard['owner'],
+      title: board.title,
+      images: board.images || [],
+      quotes: board.quotes || [],
+      createdAt: board.created_at,
+    }));
+  },
+
+  // Create new vision board
+  async create(board: Omit<VisionBoard, 'id' | 'createdAt'>): Promise<VisionBoard> {
+    const { data, error } = await supabase
+      .from('vision_boards')
+      .insert({
+        owner: board.owner,
+        title: board.title,
+        images: board.images,
+        quotes: board.quotes,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return {
+      id: data.id,
+      owner: data.owner,
+      title: data.title,
+      images: data.images || [],
+      quotes: data.quotes || [],
+      createdAt: data.created_at,
+    };
+  },
+
+  // Update vision board
+  async update(id: string, updates: Partial<VisionBoard>): Promise<void> {
+    const updateData: any = {};
+    
+    if (updates.title !== undefined) updateData.title = updates.title;
+    if (updates.images !== undefined) updateData.images = updates.images;
+    if (updates.quotes !== undefined) updateData.quotes = updates.quotes;
+
+    const { error } = await supabase
+      .from('vision_boards')
+      .update(updateData)
+      .eq('id', id);
+
+    if (error) throw error;
+  }
+};

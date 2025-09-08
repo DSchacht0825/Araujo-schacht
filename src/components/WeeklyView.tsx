@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { format, startOfWeek, addDays, addWeeks, subWeeks } from 'date-fns';
-import useStore from '../store/useStore';
+import useSupabaseStore from '../store/supabaseStore';
 import { Task, WeeklyPlan } from '../types';
 
 const WeeklyView: React.FC = () => {
-  const currentUser = useStore((state) => state.currentUser);
-  const tasks = useStore((state) => state.tasks);
-  const weeklyPlans = useStore((state) => state.weeklyPlans);
-  const addTask = useStore((state) => state.addTask);
-  const toggleTask = useStore((state) => state.toggleTask);
-  const deleteTask = useStore((state) => state.deleteTask);
-  const addWeeklyPlan = useStore((state) => state.addWeeklyPlan);
-  const updateWeeklyPlan = useStore((state) => state.updateWeeklyPlan);
+  const currentUser = useSupabaseStore((state) => state.currentUser);
+  const tasks = useSupabaseStore((state) => state.tasks);
+  const weeklyPlans = useSupabaseStore((state) => state.weeklyPlans);
+  const addTask = useSupabaseStore((state) => state.addTask);
+  const toggleTask = useSupabaseStore((state) => state.toggleTask);
+  const deleteTask = useSupabaseStore((state) => state.deleteTask);
+  const addWeeklyPlan = useSupabaseStore((state) => state.addWeeklyPlan);
+  const updateWeeklyPlan = useSupabaseStore((state) => state.updateWeeklyPlan);
 
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [newTaskTitle, setNewTaskTitle] = useState('');

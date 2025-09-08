@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import useStore from '../store/useStore';
+import useSupabaseStore from '../store/supabaseStore';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   
-  const login = useStore((state) => state.login);
-  const authError = useStore((state) => state.authError);
-  const clearAuthError = useStore((state) => state.clearAuthError);
+  const login = useSupabaseStore((state) => state.login);
+  const authError = useSupabaseStore((state) => state.authError);
+  const clearAuthError = useSupabaseStore((state) => state.clearAuthError);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

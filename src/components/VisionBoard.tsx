@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import useStore from '../store/useStore';
+import useSupabaseStore from '../store/supabaseStore';
 import { VisionBoard as VisionBoardType } from '../types';
 
 const VisionBoard: React.FC = () => {
-  const currentUser = useStore((state) => state.currentUser);
-  const visionBoards = useStore((state) => state.visionBoards);
-  const addVisionBoard = useStore((state) => state.addVisionBoard);
-  const updateVisionBoard = useStore((state) => state.updateVisionBoard);
+  const currentUser = useSupabaseStore((state) => state.currentUser);
+  const visionBoards = useSupabaseStore((state) => state.visionBoards);
+  const addVisionBoard = useSupabaseStore((state) => state.addVisionBoard);
+  const updateVisionBoard = useSupabaseStore((state) => state.updateVisionBoard);
 
   const [newImage, setNewImage] = useState('');
   const [newQuote, setNewQuote] = useState('');

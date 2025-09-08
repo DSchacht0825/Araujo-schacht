@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import useStore from '../store/useStore';
+import useSupabaseStore from '../store/supabaseStore';
 
 const PasswordSetup: React.FC = () => {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -8,8 +8,8 @@ const PasswordSetup: React.FC = () => {
   const [showPasswords, setShowPasswords] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   
-  const currentUser = useStore((state) => state.currentUser);
-  const updatePassword = useStore((state) => state.updatePassword);
+  const currentUser = useSupabaseStore((state) => state.currentUser);
+  const updatePassword = useSupabaseStore((state) => state.updatePassword);
 
   const validateNewPassword = (password: string): boolean => {
     // At least 8 characters, 1 uppercase, 1 number, 1 special character

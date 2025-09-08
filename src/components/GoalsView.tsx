@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import useStore from '../store/useStore';
+import useSupabaseStore from '../store/supabaseStore';
 import { Goal } from '../types';
 import { format } from 'date-fns';
 
 const GoalsView: React.FC = () => {
-  const currentUser = useStore((state) => state.currentUser);
-  const goals = useStore((state) => state.goals);
-  const addGoal = useStore((state) => state.addGoal);
-  const updateGoal = useStore((state) => state.updateGoal);
-  const deleteGoal = useStore((state) => state.deleteGoal);
+  const currentUser = useSupabaseStore((state) => state.currentUser);
+  const goals = useSupabaseStore((state) => state.goals);
+  const addGoal = useSupabaseStore((state) => state.addGoal);
+  const updateGoal = useSupabaseStore((state) => state.updateGoal);
+  const deleteGoal = useSupabaseStore((state) => state.deleteGoal);
 
   const [showAddGoal, setShowAddGoal] = useState(false);
   const [newGoal, setNewGoal] = useState({

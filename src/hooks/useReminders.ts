@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import useStore from '../store/useStore';
+import useSupabaseStore from '../store/supabaseStore';
 import { format, isToday, isTomorrow, differenceInDays } from 'date-fns';
 
 const useReminders = () => {
-  const tasks = useStore((state) => state.tasks);
-  const goals = useStore((state) => state.goals);
-  const currentUser = useStore((state) => state.currentUser);
+  const tasks = useSupabaseStore((state) => state.tasks);
+  const goals = useSupabaseStore((state) => state.goals);
+  const currentUser = useSupabaseStore((state) => state.currentUser);
 
   useEffect(() => {
     if (!currentUser) return;
