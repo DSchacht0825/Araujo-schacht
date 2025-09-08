@@ -68,23 +68,32 @@ const useStore = create<AppState>()(
       // Auth
       login: (email: string, password: string) => {
         const state = get();
-        // First check if user has a custom password stored
         const customPasswords = state.userPasswords;
         
-        // Try custom password first if it exists
-        if (email.toLowerCase().includes('daniel') && customPasswords['Daniel']) {
-          if (password === customPasswords['Daniel']) {
+        // Determine which user is logging in
+        let userName: 'Daniel' | 'Yvonne' | null = null;
+        if (email.toLowerCase().includes('daniel')) {
+          userName = 'Daniel';
+        } else if (email.toLowerCase().includes('yvonne')) {
+          userName = 'Yvonne';
+        }
+        
+        if (userName) {
+          // Check custom password first if it exists
+          if (customPasswords[userName] && password === customPasswords[userName]) {
             set({ 
-              currentUser: 'Daniel', 
+              currentUser: userName, 
               isAuthenticated: true, 
               authError: null 
             });
             return true;
           }
-        } else if (email.toLowerCase().includes('yvonne') && customPasswords['Yvonne']) {
-          if (password === customPasswords['Yvonne']) {
+          
+          // If no custom password or custom password doesn't match, try default
+          const user = validateLogin(email, password);
+          if (user) {
             set({ 
-              currentUser: 'Yvonne', 
+              currentUser: user.name, 
               isAuthenticated: true, 
               authError: null 
             });
@@ -92,23 +101,13 @@ const useStore = create<AppState>()(
           }
         }
         
-        // Fall back to default authentication
-        const user = validateLogin(email, password);
-        if (user) {
-          set({ 
-            currentUser: user.name, 
-            isAuthenticated: true, 
-            authError: null 
-          });
-          return true;
-        } else {
-          set({ 
-            currentUser: null, 
-            isAuthenticated: false, 
-            authError: 'Invalid email or password' 
-          });
-          return false;
-        }
+        // Failed authentication
+        set({ 
+          currentUser: null, 
+          isAuthenticated: false, 
+          authError: 'Invalid email or password' 
+        });
+        return false;
       },
       logout: () => set({ 
         currentUser: null, 
