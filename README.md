@@ -1,46 +1,143 @@
-# Getting Started with Create React App
+# Araujo-Schacht Belonging & Becoming App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A beautiful 12-week planner application built with React, TypeScript, and Tailwind CSS, designed specifically for Yvonne and Daniel to track personal and family goals.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+### 🎯 Goal Management
+- Personal goals for Yvonne and Daniel
+- Shared family goals
+- Progress tracking with visual indicators
+- Goal categories (Personal, Family, Career, Health, Financial, Spiritual, Relationship)
 
-### `npm start`
+### 📅 Weekly Planning
+- Weekly focus setting using Achievement Management System™
+- Task management with priorities
+- Progress tracking
+- Week-by-week navigation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### ☀️ Daily Rhythm Register
+- Daily habit tracking with streaks
+- Gratitude practice (3 items daily)
+- Top 3 priorities
+- Daily reflection notes
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### 🌟 Vision Board
+- Visual goal representation
+- Inspirational quotes
+- Image collections for motivation
 
-### `npm test`
+### 📊 Year Review
+- Annual accomplishments tracking
+- Lessons learned documentation
+- Areas of growth identification
+- Gratitude reflection
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 🔔 Smart Reminders
+- Automatic task and goal deadline notifications
+- Priority-based urgency levels
+- Browser notifications support
 
-### `npm run build`
+## Technology Stack
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **React 18** with TypeScript for type safety
+- **Tailwind CSS** for beautiful, responsive design
+- **Zustand** for state management with persistence
+- **date-fns** for date manipulation
+- **Local Storage** for data persistence
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Getting Started
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Prerequisites
+- Node.js 16+
+- npm or yarn
 
-### `npm run eject`
+### Installation
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+1. Clone the repository:
+```bash
+git clone [your-repo-url]
+cd belonging-becoming-app
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. Install dependencies:
+```bash
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+3. Start the development server:
+```bash
+npm start
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## Learn More
+## Building for Production
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+npm run build
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Deployment
+
+This app is configured for easy deployment to Vercel:
+
+1. Push your code to GitHub
+2. Connect your GitHub repo to Vercel
+3. Deploy automatically on every push to main
+
+## Features Inspired by Darren Hardy's "Living Your Best Year Ever"
+
+### Achievement Management System™
+- Week-by-week goal tracking
+- Daily rhythm register for habit formation
+- Regular review and adjustment cycles
+
+### Key Principles Integrated:
+1. **Weekly Focus Setting** - Align daily actions with bigger goals
+2. **Daily Rhythm** - Compound effect through consistent habits
+3. **Vision Boarding** - Visual representation of aspirations
+4. **Regular Reviews** - Monthly and yearly progress assessment
+5. **Goal Categorization** - Balance across life domains
+6. **Progress Tracking** - Visual feedback on achievement
+
+## User Experience
+
+### For Yvonne
+- Purple/secondary color theme
+- Personal goal tracking
+- Shared family goal collaboration
+
+### For Daniel  
+- Blue/primary color theme
+- Personal goal tracking
+- Shared family goal collaboration
+
+### Shared Features
+- Family goals visible to both users
+- Collaborative planning capabilities
+- Individual daily rhythms
+- Personal vision boards
+
+## Data Persistence
+
+All data is stored locally using browser localStorage, ensuring:
+- Privacy (no external servers)
+- Offline functionality
+- Data persistence between sessions
+- Fast performance
+
+## Browser Support
+
+- Chrome (recommended)
+- Firefox
+- Safari
+- Edge
+
+## Contributing
+
+This is a private family app. For feature requests or bug reports, please discuss with Yvonne and Daniel.
+
+## License
+
+Private use only - Araujo-Schacht Family
