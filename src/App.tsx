@@ -4,11 +4,11 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 
 function App() {
-  const currentUser = useStore((state) => state.currentUser);
+  const isAuthenticated = useStore((state) => state.isAuthenticated);
 
   return (
     <>
-      {currentUser ? <Dashboard /> : <Login />}
+      {isAuthenticated ? <Dashboard /> : <Login />}
     </>
   );
 }

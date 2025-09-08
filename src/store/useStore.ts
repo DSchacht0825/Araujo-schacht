@@ -4,9 +4,12 @@ import { Goal, WeeklyPlan, Task, DailyRhythm, VisionBoard, User, YearReview } fr
 import { initialWeeklyPlans } from '../data/weeklyPlans';
 import { sampleGoals } from '../data/sampleGoals';
 import { sampleTasks } from '../data/sampleTasks';
+import { validateLogin } from '../auth/authConfig';
 
 interface AppState {
   currentUser: User | null;
+  isAuthenticated: boolean;
+  authError: string | null;
   goals: Goal[];
   weeklyPlans: WeeklyPlan[];
   tasks: Task[];
@@ -15,8 +18,9 @@ interface AppState {
   yearReview: YearReview | null;
   
   // Auth actions
-  login: (user: User) => void;
+  login: (email: string, password: string) => boolean;
   logout: () => void;
+  clearAuthError: () => void;
   
   // Goal actions
   addGoal: (goal: Goal) => void;
@@ -49,6 +53,8 @@ const useStore = create<AppState>()(
   persist(
     (set) => ({
       currentUser: null,
+      isAuthenticated: false,
+      authError: null,
       goals: sampleGoals,
       weeklyPlans: initialWeeklyPlans,
       tasks: sampleTasks,
@@ -57,8 +63,30 @@ const useStore = create<AppState>()(
       yearReview: null,
       
       // Auth
-      login: (user) => set({ currentUser: user }),
-      logout: () => set({ currentUser: null }),
+      login: (email: string, password: string) => {
+        const user = validateLogin(email, password);
+        if (user) {
+          set({ 
+            currentUser: user.name, 
+            isAuthenticated: true, 
+            authError: null 
+          });
+          return true;
+        } else {
+          set({ 
+            currentUser: null, 
+            isAuthenticated: false, 
+            authError: 'Invalid email or password' 
+          });
+          return false;
+        }
+      },
+      logout: () => set({ 
+        currentUser: null, 
+        isAuthenticated: false, 
+        authError: null 
+      }),
+      clearAuthError: () => set({ authError: null }),
       
       // Goals
       addGoal: (goal) => set((state) => ({ goals: [...state.goals, goal] })),
