@@ -76,17 +76,6 @@ const WeeklyView: React.FC = () => {
       return;
     }
 
-    // Test localStorage
-    try {
-      localStorage.setItem('test', 'working');
-      const test = localStorage.getItem('test');
-      console.log('LocalStorage test:', test);
-    } catch (e) {
-      console.error('LocalStorage error:', e);
-      alert('Error: Unable to save data to localStorage');
-      return;
-    }
-
     if (!currentWeekPlan) {
       // Create new weekly plan
       const newPlan: WeeklyPlan = {
@@ -100,35 +89,22 @@ const WeeklyView: React.FC = () => {
         tasks: [],
         owner: currentUser || 'both',
       };
-      console.log('Creating new plan:', newPlan);
       addWeeklyPlan(newPlan);
     } else {
       // Update existing weekly plan
-      console.log('Updating existing plan:', currentWeekPlan.id, 'with focus:', weekFocus.trim());
       updateWeeklyPlan(currentWeekPlan.id, { focus: weekFocus.trim() });
     }
     
-    // Check if data was actually saved by looking at the store
-    setTimeout(() => {
-      const currentPlans = weeklyPlans.find(p => p.weekNumber === weekNumber);
-      console.log('After save, current plan is:', currentPlans);
-      alert(`Focus saved! Current focus: "${currentPlans?.focus || 'Not found'}"`);
-    }, 100);
+    alert('Weekly focus saved successfully!');
   };
 
   useEffect(() => {
-    console.log('WeeklyView useEffect - currentWeekPlan:', currentWeekPlan);
-    console.log('WeeklyView useEffect - weekNumber:', weekNumber);
     if (currentWeekPlan) {
-      console.log('Setting weekFocus to:', currentWeekPlan.focus);
       setWeekFocus(currentWeekPlan.focus || '');
     } else {
-      console.log('No currentWeekPlan, setting weekFocus to empty');
       setWeekFocus('');
     }
-  }, [currentWeekPlan, currentWeek, weekNumber]); // Also depend on currentWeek to reset when navigating
-  
-  console.log('WeeklyView render - weekFocus state:', weekFocus);
+  }, [currentWeekPlan, currentWeek, weekNumber]);
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -189,13 +165,9 @@ const WeeklyView: React.FC = () => {
           </label>
           <div className="flex space-x-2">
             <input
-              key={`week-focus-${weekNumber}-${currentWeekPlan?.id || 'new'}`}
               type="text"
-              value={weekFocus || ''}
-              onChange={(e) => {
-                console.log('Input onChange triggered with value:', e.target.value);
-                setWeekFocus(e.target.value);
-              }}
+              value={weekFocus}
+              onChange={(e) => setWeekFocus(e.target.value)}
               placeholder="What's your main focus this week?"
               className="input flex-1"
             />
