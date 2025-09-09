@@ -126,7 +126,7 @@ const WeeklyView: React.FC = () => {
       console.log('No currentWeekPlan, setting weekFocus to empty');
       setWeekFocus('');
     }
-  }, [currentWeekPlan, currentWeek]); // Also depend on currentWeek to reset when navigating
+  }, [currentWeekPlan, currentWeek, weekNumber]); // Also depend on currentWeek to reset when navigating
   
   console.log('WeeklyView render - weekFocus state:', weekFocus);
 

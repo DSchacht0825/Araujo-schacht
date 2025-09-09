@@ -181,6 +181,8 @@ export const tasksService = {
 export const weeklyPlansService = {
   // Get all weekly plans
   async getAll(): Promise<WeeklyPlan[]> {
+    if (!supabase) throw new Error('Supabase not configured');
+    
     const { data, error } = await supabase
       .from('weekly_plans')
       .select('*')
@@ -203,6 +205,8 @@ export const weeklyPlansService = {
 
   // Update weekly plan
   async update(id: string, updates: Partial<WeeklyPlan>): Promise<void> {
+    if (!supabase) throw new Error('Supabase not configured');
+    
     const updateData: any = {};
     
     if (updates.focus !== undefined) updateData.focus = updates.focus;
@@ -213,6 +217,26 @@ export const weeklyPlansService = {
       .from('weekly_plans')
       .update(updateData)
       .eq('id', id);
+
+    if (error) throw error;
+  },
+  
+  // Create or update weekly plan
+  async upsert(plan: WeeklyPlan): Promise<void> {
+    if (!supabase) throw new Error('Supabase not configured');
+    
+    const { error } = await supabase
+      .from('weekly_plans')
+      .upsert({
+        id: plan.id,
+        week_number: plan.weekNumber,
+        start_date: plan.startDate,
+        end_date: plan.endDate,
+        focus: plan.focus,
+        wins: plan.wins,
+        lessons: plan.lessons,
+        owner: plan.owner,
+      });
 
     if (error) throw error;
   }

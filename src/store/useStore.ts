@@ -5,6 +5,8 @@ import { initialWeeklyPlans } from '../data/weeklyPlans';
 import { sampleGoals } from '../data/sampleGoals';
 import { sampleTasks } from '../data/sampleTasks';
 import { validateLogin } from '../auth/authConfig';
+import { isSupabaseConfigured } from '../lib/supabase';
+import { weeklyPlansService } from '../services/supabaseService';
 
 interface AppState {
   currentUser: User | null;
@@ -17,6 +19,11 @@ interface AppState {
   dailyRhythms: DailyRhythm[];
   visionBoards: VisionBoard[];
   yearReview: YearReview | null;
+  
+  // Supabase sync status
+  isSupabaseEnabled: boolean;
+  syncStatus: 'idle' | 'syncing' | 'error';
+  lastSyncTime: Date | null;
   
   // Auth actions
   login: (email: string, password: string) => boolean;
@@ -49,6 +56,10 @@ interface AppState {
   
   // Year Review actions
   setYearReview: (review: YearReview) => void;
+  
+  // Supabase sync actions
+  loadFromSupabase: () => Promise<void>;
+  setSyncStatus: (status: 'idle' | 'syncing' | 'error') => void;
 }
 
 const useStore = create<AppState>()(
@@ -64,6 +75,11 @@ const useStore = create<AppState>()(
       dailyRhythms: [],
       visionBoards: [],
       yearReview: null,
+      
+      // Supabase sync state
+      isSupabaseEnabled: isSupabaseConfigured(),
+      syncStatus: 'idle',
+      lastSyncTime: null,
       
       // Auth
       login: (email: string, password: string) => {
@@ -170,24 +186,47 @@ const useStore = create<AppState>()(
       })),
       
       // Weekly Plans
-      addWeeklyPlan: (plan) => {
-        console.log('Store addWeeklyPlan called with:', plan);
-        set((state) => {
-          const newPlans = [...state.weeklyPlans, plan];
-          console.log('Store addWeeklyPlan - new plans count:', newPlans.length);
-          return { weeklyPlans: newPlans };
-        });
+      addWeeklyPlan: async (plan) => {
+        const state = get();
+        
+        // Update local state first
+        set({ weeklyPlans: [...state.weeklyPlans, plan] });
+        
+        // Sync to Supabase if enabled and available
+        if (state.isSupabaseEnabled) {
+          try {
+            set({ syncStatus: 'syncing' });
+            await weeklyPlansService.upsert(plan);
+            set({ syncStatus: 'idle', lastSyncTime: new Date() });
+          } catch (error) {
+            console.error('Supabase sync error:', error);
+            set({ syncStatus: 'error' });
+            // Continue with local storage - don't block user
+          }
+        }
       },
-      updateWeeklyPlan: (id, updates) => {
-        console.log('Store updateWeeklyPlan called with id:', id, 'updates:', updates);
-        set((state) => {
-          const updatedPlans = state.weeklyPlans.map((p) => 
-            p.id === id ? { ...p, ...updates } : p
-          );
-          const updatedPlan = updatedPlans.find(p => p.id === id);
-          console.log('Store updateWeeklyPlan - updated plan:', updatedPlan);
-          return { weeklyPlans: updatedPlans };
-        });
+      updateWeeklyPlan: async (id, updates) => {
+        const state = get();
+        
+        // Update local state first
+        const updatedPlans = state.weeklyPlans.map((p) => 
+          p.id === id ? { ...p, ...updates } : p
+        );
+        const updatedPlan = updatedPlans.find(p => p.id === id);
+        set({ weeklyPlans: updatedPlans });
+        
+        // Sync to Supabase if enabled and available
+        if (state.isSupabaseEnabled && updatedPlan) {
+          try {
+            set({ syncStatus: 'syncing' });
+            await weeklyPlansService.upsert(updatedPlan);
+            set({ syncStatus: 'idle', lastSyncTime: new Date() });
+          } catch (error) {
+            console.error('Supabase sync error:', error);
+            set({ syncStatus: 'error' });
+            // Continue with local storage - don't block user
+          }
+        }
       },
       
       // Daily Rhythms
@@ -212,6 +251,27 @@ const useStore = create<AppState>()(
       
       // Year Review
       setYearReview: (review) => set({ yearReview: review }),
+      
+      // Supabase sync actions
+      loadFromSupabase: async () => {
+        const state = get();
+        if (!state.isSupabaseEnabled) return;
+        
+        try {
+          set({ syncStatus: 'syncing' });
+          const weeklyPlans = await weeklyPlansService.getAll();
+          
+          set({
+            weeklyPlans: weeklyPlans.length > 0 ? weeklyPlans : state.weeklyPlans,
+            syncStatus: 'idle',
+            lastSyncTime: new Date(),
+          });
+        } catch (error) {
+          console.error('Failed to load from Supabase:', error);
+          set({ syncStatus: 'error' });
+        }
+      },
+      setSyncStatus: (status) => set({ syncStatus: status }),
     }),
     {
       name: 'araujo-schacht-planner',
