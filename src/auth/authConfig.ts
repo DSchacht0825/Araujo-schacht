@@ -34,19 +34,10 @@ export const authorizedAccounts: UserAccount[] = [
 ];
 
 export const validateLogin = (email: string, password: string): UserAccount | null => {
-  console.log('validateLogin called with:', { email, password });
-  console.log('Authorized accounts:', authorizedAccounts);
-  
   const user = authorizedAccounts.find(
-    account => {
-      const emailMatch = account.email.toLowerCase() === email.toLowerCase();
-      const passwordMatch = account.password === password;
-      console.log(`Checking ${account.email}: emailMatch=${emailMatch}, passwordMatch=${passwordMatch}`);
-      return emailMatch && passwordMatch;
-    }
+    account => account.email.toLowerCase() === email.toLowerCase() && 
+               account.password === password
   );
-  
-  console.log('validateLogin result:', user);
   return user || null;
 };
 

@@ -13,7 +13,8 @@ const WeeklyView: React.FC = () => {
   const addWeeklyPlan = useStore((state) => state.addWeeklyPlan);
   const updateWeeklyPlan = useStore((state) => state.updateWeeklyPlan);
 
-  const [currentWeek, setCurrentWeek] = useState(new Date());
+  // Initialize to the start of the current week (Monday)
+  const [currentWeek, setCurrentWeek] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [weekFocus, setWeekFocus] = useState('');
   const [selectedPriority, setSelectedPriority] = useState<'high' | 'medium' | 'low'>('medium');
@@ -21,12 +22,16 @@ const WeeklyView: React.FC = () => {
 
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 1 });
   const weekEnd = addDays(weekStart, 6);
-  const weekNumber = Math.ceil((currentWeek.getDate() - currentWeek.getDay() + 1) / 7);
+  
+  // Calculate week number based on the 12-week plan
+  // First week of the plan starts from the Monday of the week when the app was created
+  const planStartDate = startOfWeek(new Date(), { weekStartsOn: 1 }); // Start from this Monday
+  const weeksSinceStart = Math.floor((weekStart.getTime() - planStartDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
+  const weekNumber = Math.min(Math.max(1, weeksSinceStart + 1), 12); // Clamp between 1 and 12
 
   // Get current week's plan
   const currentWeekPlan = weeklyPlans.find(
-    (plan) => plan.weekNumber === weekNumber && 
-    format(new Date(plan.startDate), 'yyyy-MM-dd') === format(weekStart, 'yyyy-MM-dd')
+    (plan) => format(new Date(plan.startDate), 'yyyy-MM-dd') === format(weekStart, 'yyyy-MM-dd')
   );
 
   // Filter tasks for current week
@@ -53,8 +58,13 @@ const WeeklyView: React.FC = () => {
   };
 
   const handleWeekNavigation = (direction: 'prev' | 'next') => {
-    setCurrentWeek(direction === 'next' ? addWeeks(currentWeek, 1) : subWeeks(currentWeek, 1));
+    const newWeek = direction === 'next' ? addWeeks(currentWeek, 1) : subWeeks(currentWeek, 1);
+    setCurrentWeek(newWeek);
   };
+
+  // Check if we can navigate to previous/next week (within 12-week range)
+  const canGoPrev = weekNumber > 1;
+  const canGoNext = weekNumber < 12;
 
   const handleSaveFocus = () => {
     if (!currentWeekPlan) {
@@ -97,7 +107,12 @@ const WeeklyView: React.FC = () => {
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={() => handleWeekNavigation('prev')}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            disabled={!canGoPrev}
+            className={`p-2 rounded-lg transition-colors ${
+              canGoPrev 
+                ? 'hover:bg-gray-100 text-gray-700' 
+                : 'text-gray-300 cursor-not-allowed'
+            }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -106,7 +121,7 @@ const WeeklyView: React.FC = () => {
           
           <div className="text-center">
             <h2 className="text-2xl font-display font-bold text-gray-900">
-              Week {weekNumber}
+              Week {weekNumber} of 12
             </h2>
             <p className="text-gray-600">
               {format(weekStart, 'MMM d')} - {format(weekEnd, 'MMM d, yyyy')}
@@ -115,7 +130,12 @@ const WeeklyView: React.FC = () => {
 
           <button
             onClick={() => handleWeekNavigation('next')}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            disabled={!canGoNext}
+            className={`p-2 rounded-lg transition-colors ${
+              canGoNext 
+                ? 'hover:bg-gray-100 text-gray-700' 
+                : 'text-gray-300 cursor-not-allowed'
+            }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
