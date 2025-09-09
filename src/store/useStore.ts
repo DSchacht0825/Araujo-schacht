@@ -70,30 +70,35 @@ const useStore = create<AppState>()(
         const state = get();
         const customPasswords = state.userPasswords;
         
-        // Determine which user is logging in
+        // First try validateLogin with the provided credentials
+        const user = validateLogin(email, password);
+        
+        if (user) {
+          // Login successful with default password
+          set({ 
+            currentUser: user.name, 
+            isAuthenticated: true, 
+            authError: null 
+          });
+          return true;
+        }
+        
+        // If default password didn't work, check custom passwords
+        // Determine which user is logging in based on email
         let userName: 'Daniel' | 'Yvonne' | null = null;
-        if (email.toLowerCase().includes('daniel')) {
+        const emailLower = email.toLowerCase();
+        
+        if (emailLower === 'schacht.dan@gmail.com') {
           userName = 'Daniel';
-        } else if (email.toLowerCase().includes('yvonne')) {
+        } else if (emailLower === 'yviea2013@gmail.com') {
           userName = 'Yvonne';
         }
         
-        if (userName) {
-          // Check custom password first if it exists
-          if (customPasswords[userName] && password === customPasswords[userName]) {
+        if (userName && customPasswords[userName]) {
+          // Check custom password
+          if (password === customPasswords[userName]) {
             set({ 
               currentUser: userName, 
-              isAuthenticated: true, 
-              authError: null 
-            });
-            return true;
-          }
-          
-          // If no custom password or custom password doesn't match, try default
-          const user = validateLogin(email, password);
-          if (user) {
-            set({ 
-              currentUser: user.name, 
               isAuthenticated: true, 
               authError: null 
             });
