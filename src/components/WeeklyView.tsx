@@ -71,12 +71,19 @@ const WeeklyView: React.FC = () => {
   const canGoNext = weekNumber < 12;
 
   const handleSaveFocus = () => {
-    console.log('handleSaveFocus called with weekFocus:', weekFocus);
-    console.log('handleSaveFocus currentWeekPlan:', currentWeekPlan);
-    console.log('handleSaveFocus weekNumber:', weekNumber);
-    
     if (!weekFocus.trim()) {
       alert('Please enter a weekly focus before saving.');
+      return;
+    }
+
+    // Test localStorage
+    try {
+      localStorage.setItem('test', 'working');
+      const test = localStorage.getItem('test');
+      console.log('LocalStorage test:', test);
+    } catch (e) {
+      console.error('LocalStorage error:', e);
+      alert('Error: Unable to save data to localStorage');
       return;
     }
 
@@ -101,8 +108,12 @@ const WeeklyView: React.FC = () => {
       updateWeeklyPlan(currentWeekPlan.id, { focus: weekFocus.trim() });
     }
     
-    // Show feedback to user
-    alert('Weekly focus saved successfully!');
+    // Check if data was actually saved by looking at the store
+    setTimeout(() => {
+      const currentPlans = weeklyPlans.find(p => p.weekNumber === weekNumber);
+      console.log('After save, current plan is:', currentPlans);
+      alert(`Focus saved! Current focus: "${currentPlans?.focus || 'Not found'}"`);
+    }, 100);
   };
 
   useEffect(() => {
@@ -178,9 +189,13 @@ const WeeklyView: React.FC = () => {
           </label>
           <div className="flex space-x-2">
             <input
+              key={`week-focus-${weekNumber}-${currentWeekPlan?.id || 'new'}`}
               type="text"
-              value={weekFocus}
-              onChange={(e) => setWeekFocus(e.target.value)}
+              value={weekFocus || ''}
+              onChange={(e) => {
+                console.log('Input onChange triggered with value:', e.target.value);
+                setWeekFocus(e.target.value);
+              }}
               placeholder="What's your main focus this week?"
               className="input flex-1"
             />
