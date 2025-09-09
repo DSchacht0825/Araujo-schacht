@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import useStore from '../store/useStore';
+import useStore from '../store';
 import WeeklyView from './WeeklyView';
 import GoalsView from './GoalsView';
 import DailyRhythm from './DailyRhythm';

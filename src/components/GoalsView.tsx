@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import useStore from '../store/useStore';
+import useStore from '../store';
 import { Goal } from '../types';
 import { format } from 'date-fns';
 

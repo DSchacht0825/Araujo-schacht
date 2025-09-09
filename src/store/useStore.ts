@@ -5,8 +5,6 @@ import { initialWeeklyPlans } from '../data/weeklyPlans';
 import { sampleGoals } from '../data/sampleGoals';
 import { sampleTasks } from '../data/sampleTasks';
 import { validateLogin } from '../auth/authConfig';
-import { isSupabaseConfigured } from '../lib/supabase';
-import { weeklyPlansService } from '../services/supabaseService';
 
 interface AppState {
   currentUser: User | null;

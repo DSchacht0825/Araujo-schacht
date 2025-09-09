@@ -5,7 +5,8 @@ import { Goal, WeeklyPlan, Task, DailyRhythm, VisionBoard } from '../types';
 export const goalsService = {
   // Get all goals
   async getAll(): Promise<Goal[]> {
-    const { data, error } = await supabase
+    if (!supabase) throw new Error("Supabase not configured");
+    const { data, error } = await supabase!
       .from('goals')
       .select('*')
       .order('created_at', { ascending: false });
@@ -29,7 +30,8 @@ export const goalsService = {
 
   // Create new goal
   async create(goal: Omit<Goal, 'id' | 'createdAt' | 'updatedAt'>): Promise<Goal> {
-    const { data, error } = await supabase
+    if (!supabase) throw new Error("Supabase not configured");
+    const { data, error } = await supabase!
       .from('goals')
       .insert({
         title: goal.title,
@@ -74,7 +76,8 @@ export const goalsService = {
     if (updates.progress !== undefined) updateData.progress = updates.progress;
     if (updates.milestones !== undefined) updateData.milestones = updates.milestones;
 
-    const { error } = await supabase
+    if (!supabase) throw new Error("Supabase not configured");
+    const { error } = await supabase!
       .from('goals')
       .update(updateData)
       .eq('id', id);
@@ -84,7 +87,8 @@ export const goalsService = {
 
   // Delete goal
   async delete(id: string): Promise<void> {
-    const { error } = await supabase
+    if (!supabase) throw new Error("Supabase not configured");
+    const { error } = await supabase!
       .from('goals')
       .delete()
       .eq('id', id);
@@ -97,7 +101,8 @@ export const goalsService = {
 export const tasksService = {
   // Get all tasks
   async getAll(): Promise<Task[]> {
-    const { data, error } = await supabase
+    if (!supabase) throw new Error("Supabase not configured");
+    const { data, error } = await supabase!
       .from('tasks')
       .select('*')
       .order('due_date', { ascending: true });
@@ -118,7 +123,8 @@ export const tasksService = {
 
   // Create new task
   async create(task: Omit<Task, 'id'>): Promise<Task> {
-    const { data, error } = await supabase
+    if (!supabase) throw new Error("Supabase not configured");
+    const { data, error } = await supabase!
       .from('tasks')
       .insert({
         title: task.title,
@@ -158,7 +164,8 @@ export const tasksService = {
     if (updates.goalId !== undefined) updateData.goal_id = updates.goalId;
     if (updates.reminder !== undefined) updateData.reminder = updates.reminder;
 
-    const { error } = await supabase
+    if (!supabase) throw new Error("Supabase not configured");
+    const { error } = await supabase!
       .from('tasks')
       .update(updateData)
       .eq('id', id);
@@ -168,7 +175,8 @@ export const tasksService = {
 
   // Delete task
   async delete(id: string): Promise<void> {
-    const { error } = await supabase
+    if (!supabase) throw new Error("Supabase not configured");
+    const { error } = await supabase!
       .from('tasks')
       .delete()
       .eq('id', id);
@@ -183,7 +191,7 @@ export const weeklyPlansService = {
   async getAll(): Promise<WeeklyPlan[]> {
     if (!supabase) throw new Error('Supabase not configured');
     
-    const { data, error } = await supabase
+    const { data, error } = await supabase!
       .from('weekly_plans')
       .select('*')
       .order('week_number', { ascending: true });
@@ -213,7 +221,7 @@ export const weeklyPlansService = {
     if (updates.wins !== undefined) updateData.wins = updates.wins;
     if (updates.lessons !== undefined) updateData.lessons = updates.lessons;
 
-    const { error } = await supabase
+    const { error } = await supabase!
       .from('weekly_plans')
       .update(updateData)
       .eq('id', id);
@@ -225,7 +233,7 @@ export const weeklyPlansService = {
   async upsert(plan: WeeklyPlan): Promise<void> {
     if (!supabase) throw new Error('Supabase not configured');
     
-    const { error } = await supabase
+    const { error } = await supabase!
       .from('weekly_plans')
       .upsert({
         id: plan.id,
@@ -246,7 +254,8 @@ export const weeklyPlansService = {
 export const dailyRhythmsService = {
   // Get all daily rhythms
   async getAll(): Promise<DailyRhythm[]> {
-    const { data, error } = await supabase
+    if (!supabase) throw new Error("Supabase not configured");
+    const { data, error } = await supabase!
       .from('daily_rhythms')
       .select('*')
       .order('date', { ascending: false });
@@ -266,7 +275,8 @@ export const dailyRhythmsService = {
 
   // Create or update daily rhythm
   async upsert(rhythm: DailyRhythm): Promise<void> {
-    const { error } = await supabase
+    if (!supabase) throw new Error("Supabase not configured");
+    const { error } = await supabase!
       .from('daily_rhythms')
       .upsert({
         id: rhythm.id,
@@ -288,7 +298,8 @@ export const dailyRhythmsService = {
 export const visionBoardsService = {
   // Get all vision boards
   async getAll(): Promise<VisionBoard[]> {
-    const { data, error } = await supabase
+    if (!supabase) throw new Error("Supabase not configured");
+    const { data, error } = await supabase!
       .from('vision_boards')
       .select('*')
       .order('created_at', { ascending: false });
@@ -307,7 +318,8 @@ export const visionBoardsService = {
 
   // Create new vision board
   async create(board: Omit<VisionBoard, 'id' | 'createdAt'>): Promise<VisionBoard> {
-    const { data, error } = await supabase
+    if (!supabase) throw new Error("Supabase not configured");
+    const { data, error } = await supabase!
       .from('vision_boards')
       .insert({
         owner: board.owner,
@@ -338,7 +350,8 @@ export const visionBoardsService = {
     if (updates.images !== undefined) updateData.images = updates.images;
     if (updates.quotes !== undefined) updateData.quotes = updates.quotes;
 
-    const { error } = await supabase
+    if (!supabase) throw new Error("Supabase not configured");
+    const { error } = await supabase!
       .from('vision_boards')
       .update(updateData)
       .eq('id', id);

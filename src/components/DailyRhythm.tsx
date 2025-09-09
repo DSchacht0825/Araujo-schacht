@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import useStore from '../store/useStore';
+import useStore from '../store';
 import { DailyRhythm as DailyRhythmType, Habit } from '../types';
 
 const DailyRhythm: React.FC = () => {

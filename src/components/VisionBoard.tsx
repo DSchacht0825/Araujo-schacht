@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import useStore from '../store/useStore';
+import useStore from '../store';
 import { VisionBoard as VisionBoardType } from '../types';
 
 const VisionBoard: React.FC = () => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { format, startOfWeek, addDays, addWeeks, subWeeks } from 'date-fns';
-import useStore from '../store/useStore';
+import useStore from '../store';
 import { Task, WeeklyPlan } from '../types';
 
 const WeeklyView: React.FC = () => {
