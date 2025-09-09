@@ -29,12 +29,7 @@ const WeeklyView: React.FC = () => {
   const weeksSinceStart = Math.floor((weekStart.getTime() - planStartDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
   const weekNumber = Math.min(Math.max(1, weeksSinceStart + 1), 12); // Clamp between 1 and 12
 
-  // Get current week's plan
-  console.log('All weekly plans:', weeklyPlans.map(p => ({ id: p.id, weekNumber: p.weekNumber, startDate: p.startDate, focus: p.focus })));
-  console.log('Looking for week start:', format(weekStart, 'yyyy-MM-dd'));
-  console.log('Current week number:', weekNumber);
-  
-  // Try matching by week number first, then by date as fallback
+  // Get current week's plan - try matching by week number first, then by date as fallback
   let currentWeekPlan = weeklyPlans.find((plan) => plan.weekNumber === weekNumber);
   if (!currentWeekPlan) {
     // Fallback to date matching
@@ -42,7 +37,6 @@ const WeeklyView: React.FC = () => {
       (plan) => format(new Date(plan.startDate), 'yyyy-MM-dd') === format(weekStart, 'yyyy-MM-dd')
     );
   }
-  console.log('Found current week plan:', currentWeekPlan);
 
   // Filter tasks for current week
   const weekTasks = tasks.filter((task) => {
@@ -77,28 +71,32 @@ const WeeklyView: React.FC = () => {
   const canGoNext = weekNumber < 12;
 
   const handleSaveFocus = () => {
-    console.log('Saving focus:', weekFocus);
-    console.log('Current week plan:', currentWeekPlan);
-    console.log('Week start:', format(weekStart, 'yyyy-MM-dd'));
-    
+    if (!weekFocus.trim()) {
+      alert('Please enter a weekly focus before saving.');
+      return;
+    }
+
     if (!currentWeekPlan) {
+      // Create new weekly plan
       const newPlan: WeeklyPlan = {
-        id: Date.now().toString(),
+        id: `week-${weekNumber}-${Date.now()}`,
         weekNumber,
         startDate: format(weekStart, 'yyyy-MM-dd'),
         endDate: format(weekEnd, 'yyyy-MM-dd'),
-        focus: weekFocus,
+        focus: weekFocus.trim(),
         wins: [],
         lessons: [],
         tasks: [],
         owner: currentUser || 'both',
       };
-      console.log('Creating new plan:', newPlan);
       addWeeklyPlan(newPlan);
     } else {
-      console.log('Updating existing plan with focus:', weekFocus);
-      updateWeeklyPlan(currentWeekPlan.id, { focus: weekFocus });
+      // Update existing weekly plan
+      updateWeeklyPlan(currentWeekPlan.id, { focus: weekFocus.trim() });
     }
+    
+    // Show feedback to user
+    alert('Weekly focus saved successfully!');
   };
 
   useEffect(() => {
@@ -107,7 +105,7 @@ const WeeklyView: React.FC = () => {
     } else {
       setWeekFocus('');
     }
-  }, [currentWeekPlan]);
+  }, [currentWeekPlan, currentWeek]); // Also depend on currentWeek to reset when navigating
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
