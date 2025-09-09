@@ -30,9 +30,12 @@ const WeeklyView: React.FC = () => {
   const weekNumber = Math.min(Math.max(1, weeksSinceStart + 1), 12); // Clamp between 1 and 12
 
   // Get current week's plan
+  console.log('All weekly plans:', weeklyPlans);
+  console.log('Looking for week start:', format(weekStart, 'yyyy-MM-dd'));
   const currentWeekPlan = weeklyPlans.find(
     (plan) => format(new Date(plan.startDate), 'yyyy-MM-dd') === format(weekStart, 'yyyy-MM-dd')
   );
+  console.log('Found current week plan:', currentWeekPlan);
 
   // Filter tasks for current week
   const weekTasks = tasks.filter((task) => {
@@ -67,6 +70,10 @@ const WeeklyView: React.FC = () => {
   const canGoNext = weekNumber < 12;
 
   const handleSaveFocus = () => {
+    console.log('Saving focus:', weekFocus);
+    console.log('Current week plan:', currentWeekPlan);
+    console.log('Week start:', format(weekStart, 'yyyy-MM-dd'));
+    
     if (!currentWeekPlan) {
       const newPlan: WeeklyPlan = {
         id: Date.now().toString(),
@@ -79,15 +86,19 @@ const WeeklyView: React.FC = () => {
         tasks: [],
         owner: currentUser || 'both',
       };
+      console.log('Creating new plan:', newPlan);
       addWeeklyPlan(newPlan);
     } else {
+      console.log('Updating existing plan with focus:', weekFocus);
       updateWeeklyPlan(currentWeekPlan.id, { focus: weekFocus });
     }
   };
 
   useEffect(() => {
     if (currentWeekPlan) {
-      setWeekFocus(currentWeekPlan.focus);
+      setWeekFocus(currentWeekPlan.focus || '');
+    } else {
+      setWeekFocus('');
     }
   }, [currentWeekPlan]);
 
