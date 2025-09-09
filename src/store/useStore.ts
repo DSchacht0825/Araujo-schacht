@@ -170,14 +170,24 @@ const useStore = create<AppState>()(
       })),
       
       // Weekly Plans
-      addWeeklyPlan: (plan) => set((state) => ({ 
-        weeklyPlans: [...state.weeklyPlans, plan] 
-      })),
-      updateWeeklyPlan: (id, updates) => set((state) => ({
-        weeklyPlans: state.weeklyPlans.map((p) => 
-          p.id === id ? { ...p, ...updates } : p
-        )
-      })),
+      addWeeklyPlan: (plan) => {
+        console.log('Store: Adding weekly plan:', plan);
+        set((state) => {
+          const newState = { weeklyPlans: [...state.weeklyPlans, plan] };
+          console.log('Store: New weekly plans count:', newState.weeklyPlans.length);
+          return newState;
+        });
+      },
+      updateWeeklyPlan: (id, updates) => {
+        console.log('Store: Updating weekly plan:', id, updates);
+        set((state) => {
+          const updatedPlans = state.weeklyPlans.map((p) => 
+            p.id === id ? { ...p, ...updates } : p
+          );
+          console.log('Store: Updated plan:', updatedPlans.find(p => p.id === id));
+          return { weeklyPlans: updatedPlans };
+        });
+      },
       
       // Daily Rhythms
       addDailyRhythm: (rhythm) => set((state) => ({ 

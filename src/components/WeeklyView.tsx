@@ -30,11 +30,18 @@ const WeeklyView: React.FC = () => {
   const weekNumber = Math.min(Math.max(1, weeksSinceStart + 1), 12); // Clamp between 1 and 12
 
   // Get current week's plan
-  console.log('All weekly plans:', weeklyPlans);
+  console.log('All weekly plans:', weeklyPlans.map(p => ({ id: p.id, weekNumber: p.weekNumber, startDate: p.startDate, focus: p.focus })));
   console.log('Looking for week start:', format(weekStart, 'yyyy-MM-dd'));
-  const currentWeekPlan = weeklyPlans.find(
-    (plan) => format(new Date(plan.startDate), 'yyyy-MM-dd') === format(weekStart, 'yyyy-MM-dd')
-  );
+  console.log('Current week number:', weekNumber);
+  
+  // Try matching by week number first, then by date as fallback
+  let currentWeekPlan = weeklyPlans.find((plan) => plan.weekNumber === weekNumber);
+  if (!currentWeekPlan) {
+    // Fallback to date matching
+    currentWeekPlan = weeklyPlans.find(
+      (plan) => format(new Date(plan.startDate), 'yyyy-MM-dd') === format(weekStart, 'yyyy-MM-dd')
+    );
+  }
   console.log('Found current week plan:', currentWeekPlan);
 
   // Filter tasks for current week
