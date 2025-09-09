@@ -71,6 +71,10 @@ const WeeklyView: React.FC = () => {
   const canGoNext = weekNumber < 12;
 
   const handleSaveFocus = () => {
+    console.log('handleSaveFocus called with weekFocus:', weekFocus);
+    console.log('handleSaveFocus currentWeekPlan:', currentWeekPlan);
+    console.log('handleSaveFocus weekNumber:', weekNumber);
+    
     if (!weekFocus.trim()) {
       alert('Please enter a weekly focus before saving.');
       return;
@@ -89,9 +93,11 @@ const WeeklyView: React.FC = () => {
         tasks: [],
         owner: currentUser || 'both',
       };
+      console.log('Creating new plan:', newPlan);
       addWeeklyPlan(newPlan);
     } else {
       // Update existing weekly plan
+      console.log('Updating existing plan:', currentWeekPlan.id, 'with focus:', weekFocus.trim());
       updateWeeklyPlan(currentWeekPlan.id, { focus: weekFocus.trim() });
     }
     
@@ -100,12 +106,18 @@ const WeeklyView: React.FC = () => {
   };
 
   useEffect(() => {
+    console.log('WeeklyView useEffect - currentWeekPlan:', currentWeekPlan);
+    console.log('WeeklyView useEffect - weekNumber:', weekNumber);
     if (currentWeekPlan) {
+      console.log('Setting weekFocus to:', currentWeekPlan.focus);
       setWeekFocus(currentWeekPlan.focus || '');
     } else {
+      console.log('No currentWeekPlan, setting weekFocus to empty');
       setWeekFocus('');
     }
   }, [currentWeekPlan, currentWeek]); // Also depend on currentWeek to reset when navigating
+  
+  console.log('WeeklyView render - weekFocus state:', weekFocus);
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
